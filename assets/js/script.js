@@ -1,7 +1,6 @@
 // Timer 
 var timeLeft = document.getElementById("timer-count");
 var startButton = document.getElementById("start-button");
-var scorePage = document.getElementById("score-page");
 var content = document.getElementById("content")
 
 
@@ -253,51 +252,5 @@ function initialEnter() {
 
 }
 
-var displayScores;
-
-if (scorePage) {
-
-    displayScores = JSON.parse(localStorage.getItem("unordered-scores"));
-    // storeData();
-    
-    var backBtnEl = document.getElementById("back-btn");
-    backBtnEl.addEventListener("click", returnToQuiz);
-
-    var clearBtnEl = document.getElementById("clear-btn");
-    clearBtnEl.addEventListener("click", clearScores)
-
-}
-
-function returnToQuiz(event) {
-    event.preventDefault();
-
-    document.location.href = ("index.html");
-}
-
-function clearScores(event) {
-    event.preventDefault();
-    localStorage.clear();
-    scorePage.textContent="";
-}
-
-
-var unorderedScores = [];
-
-function handleInitialSubmit(event) {
-
-    event.preventDefault();
-    
-    initials = document.getElementById("name-input").value;
-    
-    listOfScores[score] = initials;
-
-    unorderedScores.push({"score": score, "name": initials,});
-
-    localStorage.setItem("unordered-scores", JSON.stringify(unorderedScores));
-    
-// high scores list
-    document.location.href = ("index.html");
-
-}
 
 init();
