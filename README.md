@@ -7,3 +7,5 @@ https://princessmoss.github.io/CodeQuiz/.
 
 # Github Repository
 https://github.com/princessmoss/CodeQuiz
+
+![](https://j.gifs.com/jZxpEW.gif)
