@@ -1,17 +1,13 @@
-// Timer setup
-var startButton = document.getElementById("start-button");
-
+// Timer 
 var timeLeft = document.getElementById("timer-count");
-
-var content = document.getElementById("content");
-
+var startButton = document.getElementById("start-button");
 var scorePage = document.getElementById("score-page");
+var content = document.getElementById("content")
 
-// Starting time for quiz
+
+// Start time for quiz
 var secondsLeft = 76;
-
 var questionCounter = 0;
-
 var timerInterval;
 
 // Timer functionality
@@ -30,24 +26,92 @@ function setTime() {
     
 }
 
-var answers;
+function compare(a,b) {
+    var comparison = 0;
+    var scoreA = a.score;
+    var scoreB = b.score;
+
+    if (scoreA > scoreB) {
+        comparison = 1;
+    } else if (scoreA < scoreB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function startQuiz() {
+    setTime();
+    content.innerHTML = "";
+    generateQuestions(codingQuestions[questionCounter]);
+}
+
+// Hitting start will start the quiz, timer and start questions.
+if (startButton) {
+    startButton.addEventListener("click", startQuiz);
+}
+
+
+// Questions, answer choices and correct answer 
+var codingQuestions = [
+    {
+        question: "Arrays in JavaScript can be used to store _____.",
+        choices: {
+            a: "other arrays", b: "booleans",  c: "numbers and strings", d: "all of the above",
+        },
+        correctAnswer: "d"
+    },
+
+    {
+        question: "Inside which HTML element do we put the JavaScript?",
+        choices: {
+            a: "<script>", b: "<header>", c: "<body>", d: "<javascript>",
+        },
+        correctAnswer: "a"
+    },
+    {
+        question: "The condition in an if/else statement is contained in:",
+        choices: {
+            a: "square brackets", b: "curly braces", c: "parenthesis", d: "quotes",
+        },
+        correctAnswer: "b"
+    },
+    {
+        question: "How to write an IF statement in JavaScript?",
+        choices: {
+            a: "if i = 5", b: "if(i == 5)", c: "if i == 5 then", d: "if i = 5 then",
+        },
+        correctAnswer: "b"
+    },
+    {
+        question: "How do you add a comment in a HTML file?",
+        choices: {
+            a: "* This is a comment *", b: "*// This is a comment //*", c: "<!--This is a comment-->", d: "//This is a comment//",
+        },
+        correctAnswer: "c"
+    },
+]
+
+
+
+
+var choices;
 
 // function to generate HTML for the questions
 function generateQuestions(questionObject) {
 
     // console.log(questionObject);
 
-    var question = document.createElement("h3");
+    var question = document.createElement("h1");
     question.setAttribute("class", "question");
     question.textContent = questionObject.question;
     content.appendChild(question);
 
-    answers = Object.entries(questionObject.answers);
+    choices = Object.entries(questionObject.choices);
 
-    // console.log(answers);
+    // console.log(choices);
 
-    for (var i=0; i < answers.length; i++) {
-        var answer = answers[i];
+    for (var i=0; i < choices.length; i++) {
+        var answer = choices[i];
         // answer = ["1", "answer text"]
         var button = document.createElement("button");
         button.textContent = answer[0] + ". " + answer[1];
@@ -55,7 +119,7 @@ function generateQuestions(questionObject) {
         button.setAttribute("id", "answer-btn");
         button.setAttribute("class", "btn btn-md btn-secondary")
         button.addEventListener("click", function (event) {
-            answerSelect(event, questionObject.correctAnswer)
+            choiceselect(event, questionObject.correctAnswer)
         });
         content.appendChild(button);
     };
@@ -64,8 +128,8 @@ function generateQuestions(questionObject) {
 
 var rightAnswer;
 
-// what happens when user selects an answer
-function answerSelect(event, correctAnswer) {
+// selection of answer
+function choiceselect(event, correctAnswer) {
 
     var chosenAnswer = event.target.value;
 
@@ -73,8 +137,8 @@ function answerSelect(event, correctAnswer) {
         rightAnswer = true;
         questionCounter++;
         content.innerHTML = "";
-        if (questionCounter <= answers.length) {
-            generateQuestions(quizQuestions[questionCounter]);
+        if (questionCounter <= choices.length) {
+            generateQuestions(codingQuestions[questionCounter]);
             rightWrongText();
         } else {
             endGame();
@@ -92,8 +156,8 @@ function answerSelect(event, correctAnswer) {
         
         rightAnswer = false;
         content.innerHTML = "";
-        if (questionCounter <= answers.length) {
-            generateQuestions(quizQuestions[questionCounter]);
+        if (questionCounter <= choices.length) {
+            generateQuestions(codingQuestions[questionCounter]);
             rightWrongText();
         } else {
             endGame();
@@ -102,6 +166,8 @@ function answerSelect(event, correctAnswer) {
     }
 
 }
+
+// selection of answer
 
 function rightWrongText() {
     var correct = document.createElement("p");
@@ -124,9 +190,7 @@ function rightWrongText() {
 
 
 var listOfScoreObjects = [];
-
 var listOfScores = new Object();
-
 var score;
 
 function endGame() {
@@ -138,7 +202,7 @@ function endGame() {
     var timerEl = document.querySelector(".timer");
     timerEl.textContent = "";
 
-    var gameOverText = document.createElement("h2");
+    var gameOverText = document.createElement("h1");
     gameOverText.textContent = "GAME OVER";
     content.appendChild(gameOverText);
 
@@ -153,10 +217,8 @@ function endGame() {
 
 
 var lastScore;
-
 var nameInput;
-
-var rawInitials;
+var initials;
 
 function initialEnter() {
 
@@ -184,8 +246,6 @@ function initialEnter() {
     nameSubmitBtn.setAttribute("class", "btn btn-sm btn-primary")
     initialsForm.appendChild(nameSubmitBtn);
     content.appendChild(initialsForm);
-
-    
 
     var initialsInputEl = document.querySelector(".initials-form");
 
@@ -220,12 +280,6 @@ function clearScores(event) {
     scorePage.textContent="";
 }
 
-// function storeData () {
-
-//     console.log(unorderedScores);
-
-//     localStorage.setItem("scores", JSON.stringify(listOfScores));
-// }
 
 var unorderedScores = [];
 
@@ -233,130 +287,17 @@ function handleInitialSubmit(event) {
 
     event.preventDefault();
     
-    rawInitials = document.getElementById("name-input").value;
+    initials = document.getElementById("name-input").value;
     
-    listOfScores[score] = rawInitials;
+    listOfScores[score] = initials;
 
-    unorderedScores.push({"score": score, "name": rawInitials,});
+    unorderedScores.push({"score": score, "name": initials,});
 
     localStorage.setItem("unordered-scores", JSON.stringify(unorderedScores));
     
+// high scores list
+    document.location.href = ("index.html");
 
-    // open next html page with high scores list
-    document.location.href = ("scores.html");
-
-
-}
-
-function init() {
-    var storedScores = JSON.parse(localStorage.getItem("unordered-scores"));
-
-    if (storedScores !==null) {
-        unorderedScores = storedScores;
-    }
-
-    if (scorePage) {
-        // console.log(unorderedScores.sort(compare).reverse());
-
-        var sortedScores = unorderedScores.sort(compare).reverse();
-
-        for (var i=0; i < sortedScores.length; i++) {
-            var scoreObject = sortedScores[i];
-            // console.log(scoreObject)
-
-            var scoreFromObject = scoreObject["score"];
-            var nameFromObject = scoreObject["name"];
-
-            var li = document.createElement("li");
-            li.textContent = scoreFromObject + " - " + nameFromObject;
-            li.setAttribute("data-index", i);
-            scorePage.appendChild(li);
-
-        }
-    }
-}
-
-var sortedScores;
-
-
-// source: https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/
-function compare(a,b) {
-    var comparison = 0;
-    var scoreA = a.score;
-    var scoreB = b.score;
-
-    if (scoreA > scoreB) {
-        comparison = 1;
-    } else if (scoreA < scoreB) {
-        comparison = -1;
-    }
-    return comparison;
-}
-
-function startQuiz() {
-    setTime();
-    content.innerHTML = "";
-    generateQuestions(quizQuestions[questionCounter]);
-}
-
-// When start clicked, start the quiz game (start timer and load questions)
-if (startButton) {
-    startButton.addEventListener("click", startQuiz);
 }
 
 init();
-
-// Establish questions and answers as objects in an array
-// the answers are another object
-var quizQuestions = [
-    {
-        question: "Commonly used data types DO NOT include:",
-        answers: {
-            1: "strings",
-            2: "booleans",
-            3: "alerts",
-            4: "numbers",
-        },
-        correctAnswer: "3"
-    },
-    {
-        question: "The condition in an if/else statement is contained in:",
-        answers: {
-            1: "quotes",
-            2: "curly braces",
-            3: "parenthesis",
-            4: "square brackets",
-        },
-        correctAnswer: "3"
-    },
-    {
-        question: "Arrays in JavaScript can be used to store:",
-        answers: {
-            1: "numbers and strings",
-            2: "other arrays",
-            3: "booleans",
-            4: "all of the above",
-        },
-        correctAnswer: "4"
-    },
-    {
-        question: "String values must be enclosed within ______ when being assigned to variables.",
-        answers: {
-            1: "commas",
-            2: "curly braces",
-            3: "quotes",
-            4: "parenthesis",
-        },
-        correctAnswer: "3"
-    },
-    {
-        question: "A very useful tool used during development and debugging for printing content to the debugger is:",
-        answers: {
-            1: "JavaScript",
-            2: "terminal/bash",
-            3: "for loops",
-            4: "console.log",
-        },
-        correctAnswer: "4"
-    },
-]

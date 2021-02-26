@@ -8,15 +8,21 @@ a {
 
 }
 
+#answer-btn {
+    margin: 4px;
+    background: #d4a373 ;
+    color: black;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     background: #e9edc9;
-    font-family: 'Staatliches', cursive;
+   font-family: 'Khand', sans-serif;
 }
 
 header {
-    font-family: 'Staatliches', cursive;
+   font-family: 'Khand', sans-serif;
     padding: 10px;
     display: flex;
     flex-wrap: nowrap;
@@ -29,11 +35,7 @@ header {
     border-color: #d4a373;
 }
 
-#answer-btn {
-    margin: 4px;
-    background: #d4a373 ;
-    color: black;
-}
+
 
 .timer {
     justify-content: flex-end;
